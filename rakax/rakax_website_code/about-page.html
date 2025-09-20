@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Rakax</title>
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/services_sec.css">
+    <link rel="stylesheet" href="styles/footer.css">
+    <link rel="stylesheet" href="styles/about-page.css">
+    
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: black;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+    <header id="header"></header>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Hero section -->
+        <section class="hero">
+            <h1>Your Digital Growth Partner</h1>
+            <p class="hero-subtitle">Where creativity meets code, strategy meets success</p>
+            <div  class="tagline">Turning Ideas into Impact</div>
+        </section>
+
+        <!-- Main about content -->
+        <div class="glass-card">
+            <h2>About Rakax</h2>
+            <p class="content-text">
+                At <strong>Rakax</strong>, we believe every brand has the potential to grow beyond limits. 
+                Founded by passionate creators, we are not just an agency — we're your <strong>strategic partner in digital transformation</strong>.
+            </p>
+            <p class="content-text">
+                We mix <strong>creativity, code, and strategy</strong> to craft digital experiences that don't just look good, 
+                but truly <strong>perform</strong>. Whether it's building user-friendly <strong>UI/UX</strong>, robust <strong>full-stack applications</strong>, 
+                impactful <strong>branding</strong>, or result-driven <strong>digital marketing</strong>, we deliver everything <strong>in-house with dedication and heart</strong>.
+            </p>
+        </div>
+
+        <!-- Services grid -->
+        <section id="services"></section>
+
+        <!-- Mission section -->
+        <section class="mission-section">
+            <h2>Our Mission</h2>
+            <p class="mission-text">
+                👉 To empower businesses with <strong>smart, scalable, and sustainable solutions</strong> that fuel long-term growth.
+            </p>
+            <p class="mission-text">
+                With Rakax, you don't just get services — you get a <strong>team that cares, innovates, and grows with you</strong>.
+            </p>
+            <a href="contact.html" class="glow-btn">Let's Grow Together</a>
+        </section>
+
+        <!-- Final tagline -->
+        <section class="final-tagline">
+            <h3>Rakax – Turning Ideas into Impact</h3>
+        </section>
+    </div>
+
+    <footer id="footer"></footer>
+    </div>
+
+    <script src="components/header.js"></script>
+    <script src="components/services.js"></script>
+    <script src="components/footer.js"></script>
+
+    <script>
+        // Smooth scroll effect
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add parallax effect to floating shapes
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const shapes = document.querySelectorAll('.floating-shape');
+                
+                shapes.forEach((shape, index) => {
+                    const speed = 0.5 + (index * 0.1);
+                    shape.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+            });
+
+            // Add intersection observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe service items
+            document.querySelectorAll('.service-item').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                item.style.transition = 'all 0.6s ease';
+                observer.observe(item);
+            });
+
+            // Add mouse move effect for glass cards
+            document.querySelectorAll('.glass-card').forEach(card => {
+                card.addEventListener('mousemove', function(e) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

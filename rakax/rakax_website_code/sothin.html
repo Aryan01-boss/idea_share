@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Monitoring UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 4px solid transparent;
+            border-radius: 16px;
+            padding: 32px 24px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.05) 75%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.2) 0%, 
+                rgba(255, 255, 255, 0.1) 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.1) 75%,
+                rgba(255, 255, 255, 0.2) 100%
+            );
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            filter: blur(1px);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover::after {
+            opacity: 0.7;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card.insights::before {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.4) 0%, 
+                rgba(147, 51, 234, 0.2) 25%,
+                transparent 50%,
+                rgba(147, 51, 234, 0.2) 75%,
+                rgba(147, 51, 234, 0.4) 100%
+            );
+        }
+
+        .card.insights::after {
+            background: linear-gradient(135deg, 
+                rgba(147, 51, 234, 0.6) 0%, 
+                rgba(147, 51, 234, 0.3) 25%,
+                transparent 50%,
+                rgba(147, 51, 234, 0.3) 75%,
+                rgba(147, 51, 234, 0.6) 100%
+            );
+        }
+
+        .card.insights:hover {
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+        }
+
+        .card.decisions::before {
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.4) 0%, 
+                rgba(59, 130, 246, 0.2) 25%,
+                transparent 50%,
+                rgba(59, 130, 246, 0.2) 75%,
+                rgba(59, 130, 246, 0.4) 100%
+            );
+        }
+
+        .card.decisions::after {
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.6) 0%, 
+                rgba(59, 130, 246, 0.3) 25%,
+                transparent 50%,
+                rgba(59, 130, 246, 0.3) 75%
+                rgba(59, 130, 246, 0.6) 100%
+            );
+        }
+
+        .card.decisions:hover {
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .icon {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .card.insights .icon {
+            background: rgba(147, 51, 234, 0.2);
+        }
+
+        .card.insights:hover .icon {
+            background: rgba(147, 51, 234, 0.3);
+        }
+
+        .card.decisions .icon {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .card.decisions:hover .icon {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .icon svg {
+            width: 24px;
+            height: 24px;
+            fill: rgba(255, 255, 255, 0.8);
+            transition: fill 0.3s ease;
+        }
+
+        .card:hover .icon svg {
+            fill: rgba(255, 255, 255, 1);
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .card-description {
+            font-size: 15px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+
+        .card:hover .card-description {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 28px 20px;
+            }
+            
+            .card-title {
+                font-size: 20px;
+            }
+            
+            .card-description {
+                font-size: 14px;
+            }
+        }
+
+        /* Subtle animation on load */
+        .card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ripple effect on click */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .card.ripple::after {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" data-feature="monitoring">
+            <div class="icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <h2 class="card-title">Credit monitoring</h2>
+            <p class="card-description">Get alerted to important changes to your reports. Watch how they affect your scores and what you can do to improve them.</p>
+        </div>
+
+        <div class="card insights" data-feature="insights">
+            <div class="icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5 1c.28 0 .5-.22.5-.5s-.22-.5-.5-.5h-.02L18 5.95c-.54-.21-1.14-.33-1.76-.33-.87 0-1.68.26-2.35.7-.67-.44-1.48-.7-2.35-.7-.87 0-1.68.26-2.35.7C8.52 5.88 7.71 5.62 6.84 5.62c-.62 0-1.22.12-1.76.33L3.48 11.45H3.5c-.28 0-.5.22-.5.5s.22.5.5.5H4v6.5c0 .83.67 1.5 1.5 1.5h13c.83 0 1.5-.67 1.5-1.5V12h.5z"/>
+                </svg>
+            </div>
+            <h2 class="card-title">Insights</h2>
+            <p class="card-description">Learn what affects your score and what you can do to improve them. Get personalized recommendations from ways to use.</p>
+        </div>
+
+        <div class="card decisions" data-feature="decisions">
+            <div class="icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </div>
+            <h2 class="card-title">Better decisions</h2>
+            <p class="card-description">Get personalized recommendations for ways to use your credit more wisely. Get alerted to important changes to your reports.</p>
+        </div>
+    </div>
+
+    <script>
+        // Add ripple effect on card click
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Remove any existing ripple
+                this.classList.remove('ripple');
+                
+                // Add ripple class
+                setTimeout(() => {
+                    this.classList.add('ripple');
+                }, 10);
+                
+                // Remove ripple after animation
+                setTimeout(() => {
+                    this.classList.remove('ripple');
+                }, 600);
+                
+                // Optional: Log which feature was clicked
+                const feature = this.dataset.feature;
+                console.log(`${feature} card clicked`);
+            });
+        });
+
+        // Add subtle parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+                
+                const deltaX = (mouseX - cardX) * 0.01;
+                const deltaY = (mouseY - cardY) * 0.01;
+                
+                card.style.transform = `translateY(-8px) rotateX(${deltaY}deg) rotateY(${deltaX}deg)`;
+            });
+        });
+
+        // Reset transform when mouse leaves the container
+        document.querySelector('.container').addEventListener('mouseleave', () => {
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
