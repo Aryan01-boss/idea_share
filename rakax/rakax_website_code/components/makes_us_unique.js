@@ -9,7 +9,9 @@
             <div class="makes_us_unique-card">
                 <h1 class="makes_us_unique-title">All Your Website Needs, Expertly Handled</h1>
                 <p class="makes_us_unique-subtitle">End-to-end website solutions ✨ that ensure your website looks great, functions flawlessly, and drives results. ✨</p>
+                <a href="https://cal.com/rakax-services-evegox">
                 <button class="book-call-btn">BOOK A CALL</button>
+                </a>
             </div>
             
             <div class="services-list">
@@ -25,7 +27,9 @@
         <!-- Main Section -->
         <section class="main-section">
             <h2 class="main-title">What makes us unique?</h2>
-            <button class="intro-btn">Book an Intro Call →</button>
+            <a href="https://cal.com/rakax-services-evegox">
+            <button href="https://cal.com/rakax-services-evegox" class="intro-btn">Book an Intro Call →</button>
+            </a>
         </section>
 
         <!-- Comparison Headers -->
